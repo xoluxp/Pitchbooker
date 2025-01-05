@@ -1,0 +1,88 @@
+.how-it-works {
+   padding: 50px 0;
+   text-align: center;
+   background-color: #9f7cff; /* Light gray background */
+ }
+ 
+ .how-it-works-heading {
+   font-size: 2.5rem;
+   margin-bottom: 2rem;
+ }
+ 
+ .steps-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+   gap: 20px;
+ }
+ 
+ .step {
+   border: 1px solid #ddd;
+   padding: 20px;
+   border-radius: 5px;
+ }
+ 
+ .step-number {
+   font-size: 2rem;
+   font-weight: bold;
+   margin-bottom: 1rem;
+ }
+ 
+ .step-icon {
+   font-size: 3rem; /* Adjust icon size as needed */
+   margin-bottom: 1rem;
+ }
+ 
+ .step-title {
+   font-size: 1.5rem;
+   margin-bottom: 0.5rem;
+ }
+ 
+ .step-description {
+   font-size: 1rem;
+   color: #555;
+ }
+ .testimonials-carousel {
+  width: 80%; /* Adjust width as needed */
+  margin: 0 auto; /* Center the carousel */
+}
+
+.testimonials {
+  padding: 50px 0;
+  text-align: center;
+  background-color: pink; /* Example background color */
+}
+
+.testimonials-heading {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: black; /* Example heading color */
+}
+
+.testimonials-carousel {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.slick-slider { /* Target the slick-slider element directly */
+  background-color: white; /* Set the background color to white */
+  padding: 20px; /* Add some padding */
+  border-radius: 10px; /* Add rounded corners */
+}
+
+.testimonial {
+  /* Remove or adjust the border, padding, and margin */
+  /* border: 1px solid #ddd; */
+  /* padding: 20px; */
+  /* margin-bottom: 20px; */
+}
+
+.testimonial-quote {
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: black; /* Example quote color */
+}
+
+.testimonial-author {
+  color: #555; /* Example author color */
+}
+
