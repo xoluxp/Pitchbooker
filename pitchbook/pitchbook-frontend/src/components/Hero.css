@@ -1,0 +1,66 @@
+.hero {
+   background-color: black; /* Black background */
+   color: white;
+   display: flex;
+   justify-content: center; /* Center horizontally */
+   align-items: center; /* Center vertically */
+   min-height: 100vh; /* Make it at least the height of the viewport */
+   text-align: center; /* Center text */
+ }
+ 
+ .hero-content {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   max-width: 90%; /* Increased max-width */
+   margin: 0 auto;
+   padding: 20px;
+ }
+ 
+ .hero-text {
+   flex: 1;
+   margin-right: 40px; /* Increased margin */
+ }
+ 
+ .hero-graphic {
+   flex: 1;
+   background-image: url("../graphic.png");
+   background-size: contain;
+   background-repeat: no-repeat;
+   width: 500px; /* Increased width */
+   height: 400px; /* Increased height */
+ }
+ 
+ .hero-heading {
+   font-size: 2.5rem; /* Adjust font size as needed */
+   margin-bottom: 1rem;
+ }
+ 
+ .hero-subheading {
+   font-size: 1.8rem; /* Adjust font size as needed */
+   margin-bottom: 2rem;
+ }
+ 
+ .btn {
+   padding: 10px 20px;
+   margin: 0 10px;
+   border-radius: 5px; /* Add rounded corners */
+   font-weight: bold;
+ }
+ 
+ .btn-primary {
+   background-color: #00A86B; /* Green */
+   color: white;
+   border: none;
+ }
+ 
+ .btn-secondary {
+   background-color: transparent;
+   color: #00A86B;
+   border: 2px solid #00A86B;
+ }
+ 
+ .hero-image {
+   flex: 1; /* Allow the image to take up available space */
+   /* Add styles for your image here, e.g., background-image, width, height */
+ }

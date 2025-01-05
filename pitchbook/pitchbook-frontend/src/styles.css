@@ -1,0 +1,96 @@
+/* Hero Section */
+.hero {
+   background-image: url("/pitchbook/src/hero-image.png"); /* Replace with your image path */
+   background-size: cover;
+   background-position: center;
+   color: white;
+   text-align: center;
+   padding: 100px 0;
+ }
+ 
+ .hero-content {
+   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+   padding: 20px;
+ }
+ 
+ .hero h1 {
+   font-size: 3rem;
+   font-weight: bold;
+   margin-bottom: 1rem;
+ }
+ 
+ .hero p {
+   font-size: 1.5rem;
+   margin-bottom: 2rem;
+ }
+ 
+ .hero .btn {
+   margin: 0 10px;
+ }
+ 
+ .hero .btn-primary {
+   background-color: #00A86B; /* Green */
+   border-color: #00A86B;
+ }
+ 
+ .hero .btn-secondary {
+   background-color: white;
+   color: #00A86B;
+   border-color: #00A86B;
+ }
+ 
+ /* Features Section */
+ .features {
+   padding: 50px 0;
+   text-align: center;
+ }
+ 
+ .features h2 {
+   font-size: 2.5rem;
+   margin-bottom: 2rem;
+ }
+ 
+ /* Feature Cards (You'll need to add more specific styles for these) */
+ .feature-card {
+   /* Add styles for card layout, icons, etc. */
+ }
+ 
+ /* How It Works Section */
+ .how-it-works {
+   padding: 50px 0;
+   text-align: center;
+ }
+ 
+ .how-it-works h2 {
+   font-size: 2.5rem;
+   margin-bottom: 2rem;
+ }
+ 
+ /* Steps (You'll need to add more specific styles for these) */
+ .step {
+   /* Add styles for step layout, icons, etc. */
+ }
+ 
+ /* Testimonials Section */
+ .testimonials {
+   padding: 50px 0;
+   text-align: center;
+ }
+ 
+ .testimonials h2 {
+   font-size: 2.5rem;
+   margin-bottom: 2rem;
+ }
+ 
+ /* Testimonials Carousel (You'll need to add more specific styles for this) */
+ .testimonial {
+   /* Add styles for testimonial layout, user details, etc. */
+ }
+ 
+ /* Footer Section */
+ .footer {
+   background-color: #333;
+   color: white;
+   padding: 30px 0;
+   text-align: center;
+ }
