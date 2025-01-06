@@ -1,0 +1,15 @@
+.scroll-to-top {
+   position: fixed;
+   bottom: 20px;
+   right: 20px;
+   z-index: 100; /* Ensure it's above other elements */
+ }
+ 
+ .scroll-to-top button {
+   background-color: #00A86B; /* Green */
+   color: white;
+   border: none;
+   border-radius: 50%; /* Make it circular */
+   padding: 10px;
+   cursor: pointer;
+ }

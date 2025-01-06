@@ -5,9 +5,12 @@ import HowItWorks from './components/HowItWorks';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 import './styles.css'; 
+import ScrollToTopButton from './components/ScrollToTopButton';
+
 
 
 function App() {
+  
   return (
     <div>
       <Hero />
@@ -15,8 +18,10 @@ function App() {
       <HowItWorks />
       <Testimonials />
       <Footer />
+      <ScrollToTopButton /> 
     </div>
   );
 }
+
 
 export default App;
