@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB (we'll add the connection string later)
+// Connect to MongoDB Atlas
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
@@ -19,9 +19,11 @@ connection.once('open', () => {
 
 const pitchesRouter = require('./routes/pitches');
 app.use('/pitches', pitchesRouter);
+
+const bookingsRouter = require('./routes/bookings');
+app.use('/bookings', bookingsRouter); // Define the /bookings route
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
-
-// new to life

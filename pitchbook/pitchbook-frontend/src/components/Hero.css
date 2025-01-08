@@ -64,3 +64,11 @@
    flex: 1; /* Allow the image to take up available space */
    /* Add styles for your image here, e.g., background-image, width, height */
  }
+ .btn-primary {
+  background-color: #00A86B; /* Green */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
