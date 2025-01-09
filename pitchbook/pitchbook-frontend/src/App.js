@@ -7,6 +7,7 @@ import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import Booking from './components/Booking';
+import Confirmation from "./components/Confirmation"; // Import Confirmation component
 import './styles.css'; 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/booking" element={<Booking />} /> {/* Booking route */}
+        <Route path="/confirmation" element={<Confirmation />} />{" "} {/* Confirmation route */}
         <Route path="/" element={ 
           <>
             <Hero /> 

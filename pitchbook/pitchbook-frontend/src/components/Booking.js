@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import './Booking.css';
-import Header from './Header';
-import Footer from './Footer';
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "./Booking.css";
+import Header from "./Header";
+import Footer from "./Footer";
 
 function Booking() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [pitches, setPitches] = useState([]);
+  const [bookingConfirmed, setBookingConfirmed] = useState(false); // Add state for confirmation
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchPitches = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/pitches');
+        const response = await axios.get("http://localhost:5000/pitches");
         setPitches(response.data);
       } catch (error) {
-        console.error('Error fetching pitches:', error);
+        console.error("Error fetching pitches:", error);
       }
     };
 
@@ -24,19 +31,27 @@ function Booking() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:5000/bookings', data);
-      console.log(response.data); 
-      // Optionally, add a success message or redirect the user
+      const response = await axios.post("http://localhost:5000/bookings", data);
+      console.log(response.data);
+      setBookingConfirmed(true); // Set confirmation state to true
+      // Redirect to confirmation page after a short delay
+      setTimeout(() => {
+        navigate("/confirmation", { state: { bookingData: data } }); // Pass booking data to confirmation page
+      }, 2000); // 2 seconds delay
     } catch (error) {
-      console.error('Booking error:', error);
-      // Optionally, display an error message to the user
+      console.error("Booking error:", error);
     }
   };
 
   return (
     <div>
       <Header />
-      <form onSubmit={handleSubmit(onSubmit)} className="booking-form"> 
+{bookingConfirmed && ( // Conditionally render the confirmation message
+        <div className="booking-confirmation">
+          Booking confirmed! You will be redirected shortly...
+        </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="booking-form">
         <h2>Book a Pitch</h2>
 
         <div>
@@ -46,7 +61,7 @@ function Booking() {
         </div>
 
         <div>
-          <label htmlFor="teammates">Number of Teammates:</label>
+          <label htmlFor="teammates">Number of Players:</label>
           <input type="number" id="teammates" min="0" {...register('teammates')} />
         </div>
 
