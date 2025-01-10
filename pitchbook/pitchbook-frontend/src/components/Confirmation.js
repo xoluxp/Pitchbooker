@@ -16,10 +16,13 @@ function Confirmation() {
       {bookingData && ( // Conditionally render booking details
         <div>
           <p>
-            Thank you, <strong>{bookingData.name}</strong>! Your booking has been registred.
+            Thank you, <strong>{bookingData.name}</strong> ! Your booking has been registred.
           </p>
           
           <p>Number of players : {bookingData.teammates}</p>
+          <p>Pitch: {bookingData.pitchName}</p>
+          <p>Location: {bookingData.pitchLocation}</p> {/* Display location */}
+          <p>Type: {bookingData.pitchType}</p> {/* Display pitch type */}
           <p>Date: {bookingData.date}</p>
           <p>Time: {bookingData.time}</p>
           <p><h3><strong>Consider being 15mins early to the pitch !!!</strong></h3></p>
