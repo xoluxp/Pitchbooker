@@ -22,5 +22,19 @@
    border: 1px solid #ddd;
    border-radius: 5px;
  }
+
  
+ 
+ /* ... other styles ... */
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(34, 107, 244, 0.1);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+
+
  /* Add more styles as needed for forms, buttons, tables, etc. */

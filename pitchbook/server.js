@@ -23,6 +23,9 @@ app.use('/pitches', pitchesRouter);
 const bookingsRouter = require('./routes/bookings');
 app.use('/bookings', bookingsRouter); // Define the /bookings route
 
+const usersRouter = require('./routes/users'); // Assuming you'll create users.js
+app.use('/api/users', usersRouter);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

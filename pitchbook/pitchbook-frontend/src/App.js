@@ -1,5 +1,6 @@
-import React, { useState, useEffect, axios } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 import Hero from './components/Hero';
 import Features from './components/Features';
 import HowItWorks from './components/HowItWorks';
@@ -9,21 +10,27 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Booking from './components/Booking';
 import Confirmation from "./components/Confirmation"; // Import Confirmation component
 import AdminDashboard from './components/AdminDashboard';
+import Login from './components/Login';
 import './styles.css'; 
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin state
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Fetch user data and role from your backend API
-        const response = await axios.get('/api/users/me', { withCredentials: true }); // Include credentials if needed
-        const user = response.data;
-        setIsAdmin(user.isAdmin); // Set isAdmin based on user role
+        const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+        if (token) {
+          const response = await axios.get('http://localhost:5000/api/users/me', {
+            headers: { Authorization: `Bearer ${token}` } // Include JWT in the request header
+          });
+          const user = response.data;
+          setIsAuthenticated(true);
+          setIsAdmin(user.isAdmin);
+        }
       } catch (error) {
-        console.error('Authentication error:', error);
-        // Handle authentication error (e.g., redirect to login)
+        // ... error handling ...
       }
     };
 
@@ -37,7 +44,10 @@ function App() {
       <Routes>
         <Route path="/booking" element={<Booking />} /> {/* Booking route */}
         <Route path="/confirmation" element={<Confirmation />} />{" "} {/* Confirmation route */}
-        <Route path="/admin" element={isAdmin ? <AdminDashboard /> : <Navigate to="/" />} /> {/* Admin route */}
+        <Route  path="/admin" 
+            element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate to="/login" />} 
+          />
+          <Route path="/login" element={<Login />} />
         <Route path="/" element={ 
           <>
             <Hero /> 
