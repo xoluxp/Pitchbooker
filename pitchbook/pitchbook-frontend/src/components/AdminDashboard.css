@@ -1,40 +1,184 @@
+/* AdminDashboard.css */
 .admin-dashboard {
-   padding: 20px;
- }
- 
- .admin-dashboard h2 {
-   text-align: center;
-   margin-bottom: 30px;
- }
- 
- .admin-dashboard h3 {
-   margin-top: 30px;
- }
- 
- .admin-dashboard ul {
-   list-style: none;
-   padding: 0;
- }
- 
- .admin-dashboard li {
-   margin-bottom: 10px;
-   padding: 10px;
-   border: 1px solid #ddd;
-   border-radius: 5px;
- }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
 
- 
- 
- /* ... other styles ... */
-
-.card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(34, 107, 244, 0.1);
-  padding: 10px;
+h2, h3 {
+  font-size: 1.5rem;
   margin-bottom: 10px;
 }
 
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #4CAF50;  /* Default green for primary actions */
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
- /* Add more styles as needed for forms, buttons, tables, etc. */
+button:hover {
+  background-color: #45a049;  /* Darker green on hover */
+}
+
+button:focus {
+  outline: none;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+form input, form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+form input:focus, form select:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form span {
+  color: red;
+  font-size: 0.875rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table td button {
+  padding: 5px 10px;
+  margin-right: 10px;
+  background-color:  #0aa35c;
+  border: 1px solid #1b1b1b;
+  cursor: pointer;
+}
+
+table td button:hover {
+  background-color: #f1f1f1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9); /* 90% opacity */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Adjust width */
+  max-width: 500px;
+  min-width: 300px;
+  z-index: 1050;
+}
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.modal button {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+  background-color: #e53935;
+}
+
+.modal button:focus {
+  outline: none;
+}
+
+/* Hover and Focus Effects on Form Fields */
+form input:focus, form select:focus {
+  border-color: #4CAF50; /* Green focus state */
+  background-color: #f0f8f0; /* Light background on focus */
+  outline: none;
+}
+
+form input, form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 15px;
+  }
+
+  table, form {
+    width: 100%;
+  }
+
+  .card {
+    padding: 15px;
+  }
+}
+
+/* For delete buttons specifically */
+button.delete-btn {
+  background-color: #f44336;  /* Red color */
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+button.delete-btn:hover {
+  background-color: #e53935;  /* Darker red on hover */
+}
+
+button.delete-btn:focus {
+  outline: none;
+}
+
+.admin-dashboard button { /*  buttons in the admin dashboard */
+  padding: 7px 20px; 
+  font-size: 0.5rem; 
+}

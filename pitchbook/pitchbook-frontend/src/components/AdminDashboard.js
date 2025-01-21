@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'; // Import the icons you need
 import "./AdminDashboard.css";
 
 // Custom hook for fetching data with loading state
@@ -9,6 +11,7 @@ const useFetchData = (url) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -172,13 +175,12 @@ function AdminDashboard() {
       <h2>Admin Dashboard</h2>
       <section className="pitches-section card"> {/* Added card class */}
       <h3>Manage Pitches</h3>
-      <button onClick={refreshDashboardData}>Refresh Dashboard</button> {/* Add a refresh button */}
       <ul>
         {pitches.map((pitch) => (
           <li key={pitch._id}>
             {pitch.name} - {pitch.location} - {pitch.PitchType}
-            <button onClick={() => handlePitchEdit(pitch)}>Edit</button>
-            <button onClick={() => handlePitchDelete(pitch._id)}>Delete</button>
+            <button onClick={() => handlePitchEdit(pitch)}> <FontAwesomeIcon icon={faEdit} /> </button>
+            <button className="delete-btn" onClick={() => handlePitchDelete(pitch._id)}><FontAwesomeIcon icon={faTrash} /> </button>
           </li>
         ))}
       </ul>
@@ -216,7 +218,7 @@ function AdminDashboard() {
       >
         <h3>Edit Pitch</h3>
 <form onSubmit={handleSubmit(handlePitchUpdate)}>
-          <h3>Edit Pitch</h3>
+          
           <div>
             <label htmlFor="name">Name:</label>
             <input type="text" id="name" {...register("name")} />
@@ -267,7 +269,7 @@ function AdminDashboard() {
               <td>{booking.time}</td>
               <td>
                 <button onClick={() => handleBookingEdit(booking)}>Edit</button>
-                <button onClick={() => handleBookingDelete(booking._id)}>Delete</button>
+                <button className="delete-btn" onClick={() => handleBookingDelete(booking._id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -317,7 +319,7 @@ function AdminDashboard() {
       >
         <h3>Edit Booking</h3>
 <form onSubmit={handleSubmit(handleBookingUpdate)}>
-          <h3>Edit Booking</h3>
+          
           <div>
             <label htmlFor="name">Name:</label>
             <input type="text" id="name" {...register("name")} />
