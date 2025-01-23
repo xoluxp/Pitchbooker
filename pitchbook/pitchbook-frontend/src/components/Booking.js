@@ -31,7 +31,7 @@ function Booking() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:5000/bookings", data);
+      const response = await axios.post("http://localhost:5000/bookings/add", data);
       console.log(response.data);
       setBookingConfirmed(true);
       // alert('Booking created successfully!');  // uncomment to Show alert message to the user after booking
