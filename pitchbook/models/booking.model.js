@@ -1,16 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
 
-const bookingSchema = new Schema({
-  name: { type: String, required: true },
-  teammates: { type: Number },
-  pitch: { type: Schema.Types.ObjectId, ref: 'Pitch', required: true },
-  date: { type: Date, required: true },
-  time: { type: String, required: true }
-  // ... other fields as needed ...
-}, {
-  timestamps: true,
-});
+const bookingSchema = new Schema(
+    {
+        name: { type: String, required: true },
+        pitch: { type: String, required: true },
+        date: { type: Date, required: true },
+        time: { type: String, required: true },
+    },
+    {
+        timestamps: true,
+    }
+);
 
-const Booking = mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.model("Booking", bookingSchema);
+
 module.exports = Booking;

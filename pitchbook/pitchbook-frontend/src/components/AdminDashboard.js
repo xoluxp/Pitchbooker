@@ -1,362 +1,463 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import Modal from 'react-modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'; // Import the icons you need
+import Modal from "react-modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit, faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 import "./AdminDashboard.css";
 
-// Custom hook for fetching data with loading state
 const useFetchData = (url) => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(url);
-        setData(response.data);
-      } catch (error) {
-        console.error(`Error fetching data from ${url}:`, error);
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(url);
+                setData(response.data);
+            } catch (error) {
+                console.error(`Error fetching data from ${url}:`, error);
+                setError(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    fetchData();
-  }, [url]);
+        fetchData();
+    }, [url]);
 
-  return { data, isLoading, error, setData };
+    return { data, isLoading, error, setData };
 };
 
 function AdminDashboard() {
-  const {
-    data: pitches,
-    setData: setPitches,
-  } = useFetchData("http://localhost:5000/pitches");
-  const {
-    data: bookings,
-    setData: setBookings,
-  } = useFetchData("http://localhost:5000/bookings");
+    const {
+        data: pitches,
+        isLoading: pitchesLoading,
+        error: pitchesError,
+        setData: setPitches,
+    } = useFetchData("http://localhost:5000/pitches");
+    const {
+        data: bookings,
+        isLoading: bookingsLoading,
+        error: bookingsError,
+        setData: setBookings,
+    } = useFetchData("http://localhost:5000/bookings");
 
-  const [editingPitch, setEditingPitch] = useState(null);
-  const [editingBooking, setEditingBooking] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors }
-  } = useForm();
+    const [editingPitch, setEditingPitch] = useState(null);
+    const [editingBooking, setEditingBooking] = useState(null);
+    const [feedbackMessage, setFeedbackMessage] = useState(null);
+    const [feedbackType, setFeedbackType] = useState(null); // 'success' or 'error'
 
-  // Function to refresh dashboard data
-   const refreshDashboardData = async () => {
-    try {
-      const pitchesResponse = await axios.get('http://localhost:5000/pitches');
-      setPitches(pitchesResponse.data);
+    // Separate useForm instances for pitches and bookings
+    const {
+        register: registerPitch,
+        handleSubmit: handleSubmitPitch,
+        reset: resetPitch,
+        setValue: setValuePitch,
+        formState: { errors: pitchErrors },
+    } = useForm();
 
-      const bookingsResponse = await axios.get('http://localhost:5000/bookings');
-      setBookings(bookingsResponse.data);
-    } catch (error) {
-      console.error('Error refreshing data:', error);
-      // Optionally, display an error message to the user
-    }
-  };
+    const {
+        register: registerBooking,
+        handleSubmit: handleSubmitBooking,
+        reset: resetBooking,
+        setValue: setValueBooking,
+        formState: { errors: bookingErrors },
+    } = useForm();
 
-  // --- Pitch Management ---
+    const refreshDashboardData = async () => {
+        try {
+            const pitchesResponse = await axios.get("http://localhost:5000/pitches");
+            setPitches(pitchesResponse.data);
 
-  const handlePitchEdit = (pitch) => {
-    setEditingPitch(pitch);
-    setValue("name", pitch.name);
-    setValue("location", pitch.location);
-    setValue("PitchType", pitch.PitchType);
-  };
+            const bookingsResponse = await axios.get("http://localhost:5000/bookings");
+            setBookings(bookingsResponse.data);
+        } catch (error) {
+            console.error("Error refreshing data:", error);
+            setFeedbackMessage("Error refreshing data");
+            setFeedbackType("error");
+        }
+    };
 
-  const handlePitchUpdate = async (data) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/pitches/${editingPitch._id}`,
-        data
-      );
-      // Refresh data after updating
-      refreshDashboardData();
-      setEditingPitch(null);
-      reset();
-      alert("Pitch updated successfully!");
-    } catch (error) {
-      console.error("Error updating pitch:", error);
-      alert(`Error updating pitch: ${error.message}`);
-    }
-  };
+    const handlePitchEdit = (pitch) => {
+        setEditingPitch(pitch);
+        setValuePitch("name", pitch.name);
+        setValuePitch("location", pitch.location);
+        setValuePitch("PitchType", pitch.PitchType);
+    };
 
-  const handlePitchDelete = async (pitchId) => {
-    try {
-      await axios.delete(`http://localhost:5000/pitches/${pitchId}`);
-      // Refresh data after deleting
-      refreshDashboardData();
-      alert("Pitch deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting pitch:", error);
-      alert(`Error deleting pitch: ${error.message}`);
-    }
-  };
+    const handlePitchUpdate = async (data) => {
+        try {
+            await axios.put(`http://localhost:5000/pitches/${editingPitch._id}`, data);
 
-  const onSubmitPitch = async (data) => {
-    try {
-      await axios.post("http://localhost:5000/pitches/add", data);
-      // Refresh data after adding
-      refreshDashboardData();
-      reset();
-      alert("Pitch added successfully!");
-    } catch (error) {
-      console.error("Error adding pitch:", error);
-      alert(`Error adding pitch: ${error.message}`);
-    }
-  };
+            refreshDashboardData();
+            setEditingPitch(null);
+            resetPitch();
+            setFeedbackMessage("Pitch updated successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error updating pitch:", error);
+            setFeedbackMessage(`Error updating pitch: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
 
-  // --- Booking Management ---
+    const handlePitchDelete = async (pitchId) => {
+        try {
+            await axios.delete(`http://localhost:5000/pitches/${pitchId}`);
 
-  const handleBookingEdit = (booking) => {
-    setEditingBooking(booking);
-    setValue("name", booking.name);
-    setValue("pitch", booking.pitch);
-    setValue("date", booking.date);
-    setValue("time", booking.time);
-  };
+            refreshDashboardData();
+            setFeedbackMessage("Pitch deleted successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error deleting pitch:", error);
+            setFeedbackMessage(`Error deleting pitch: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
 
-  const handleBookingUpdate = async (data) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/bookings/${editingBooking._id}`,
-        data
-      );
-      // Refresh data after updating
-      refreshDashboardData();
-      setEditingBooking(null);
-      reset();
-      alert("Booking updated successfully!");
-    } catch (error) {
-      console.error("Error updating booking:", error);
-      alert(`Error updating booking: ${error.message}`);
-    }
-  };
+    const onSubmitPitch = async (data) => {
+        try {
+            await axios.post("http://localhost:5000/pitches/add", data);
 
-  const handleBookingDelete = async (bookingId) => {
-    try {
-      await axios.delete(`http://localhost:5000/bookings/${bookingId}`);
-      // Refresh data after deleting
-      refreshDashboardData();
-      alert("Booking deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting booking:", error);
-      alert(`Error deleting booking: ${error.message}`);
-    }
-  };
+            refreshDashboardData();
+            resetPitch();
+            setFeedbackMessage("Pitch added successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error adding pitch:", error);
+            setFeedbackMessage(`Error adding pitch: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
 
-  const onSubmitBooking = async (data) => {
-    try {
-      await axios.post("http://localhost:5000/bookings", data);
-      // Refresh data after adding
-      refreshDashboardData();
-      reset();
-      alert("Booking added successfully!");
-    } catch (error) {
-      console.error("Error adding booking:", error);
-      alert(`Error adding booking: ${error.message}`);
-    }
-  };
+    const handleBookingEdit = (booking) => {
+        setEditingBooking(booking);
+        setValueBooking("name", booking.name);
+        setValueBooking("pitch", booking.pitch);
+        setValueBooking("date", booking.date);
+        setValueBooking("time", booking.time);
+    };
 
-  return (
-    <div className="admin-dashboard">
-      <h2>Admin Dashboard</h2>
-      <section className="pitches-section card"> {/* Added card class */}
-      <h3>Manage Pitches</h3>
-      <ul>
-        {pitches.map((pitch) => (
-          <li key={pitch._id}>
-            {pitch.name} - {pitch.location} - {pitch.PitchType}
-            <button onClick={() => handlePitchEdit(pitch)}> <FontAwesomeIcon icon={faEdit} /> </button>
-            <button className="delete-btn" onClick={() => handlePitchDelete(pitch._id)}><FontAwesomeIcon icon={faTrash} /> </button>
-          </li>
-        ))}
-      </ul>
+    const handleBookingUpdate = async (data) => {
+        try {
+            await axios.put(`http://localhost:5000/bookings/${editingBooking._id}`, data);
 
-      <h3>Add New Pitch</h3>
-      <form onSubmit={handleSubmit(onSubmitPitch)}>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", { required: true })}
-            />
-            {errors.name && <span>This field is required</span>}
-          </div>
-        <div>
-          <label htmlFor="location">Location:</label>
-          <input type="text" id="location" {...register("location")} />
+            refreshDashboardData();
+            setEditingBooking(null);
+            resetBooking();
+            setFeedbackMessage("Booking updated successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error updating booking:", error);
+            setFeedbackMessage(`Error updating booking: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
+
+    const handleBookingDelete = async (bookingId) => {
+        try {
+            await axios.delete(`http://localhost:5000/bookings/${bookingId}`);
+
+            refreshDashboardData();
+            setFeedbackMessage("Booking deleted successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error deleting booking:", error);
+            setFeedbackMessage(`Error deleting booking: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
+
+    const onSubmitBooking = async (data) => {
+        try {
+            await axios.post("http://localhost:5000/bookings/add", data);
+
+            refreshDashboardData();
+            resetBooking();
+            setFeedbackMessage("Booking added successfully!");
+            setFeedbackType("success");
+        } catch (error) {
+            console.error("Error adding booking:", error);
+            setFeedbackMessage(`Error adding booking: ${error.message}`);
+            setFeedbackType("error");
+        }
+    };
+
+    return (
+        <div className="admin-dashboard">
+            <h2>Admin Dashboard</h2>
+
+            {/* Feedback message */}
+            {feedbackMessage && (
+                <div className={`feedback-message ${feedbackType}`}>
+                    {feedbackMessage}
+                </div>
+            )}
+
+            <div className="cards-container">
+                {/* Pitches Card */}
+                <div className="card pitches-card">
+                    <h3>Total Pitches</h3>
+                    {pitchesLoading ? (
+                        <div className="loading">
+                            <FontAwesomeIcon icon={faSpinner} spin />
+                        </div>
+                    ) : pitchesError ? (
+                        <div className="error">Error: {pitchesError.message}</div>
+                    ) : (
+                        <div className="total-count">{pitches.length}</div>
+                    )}
+                </div>
+
+                {/* Bookings Card */}
+                <div className="card bookings-card">
+                    <h3>Total Bookings</h3>
+                    {bookingsLoading ? (
+                        <div className="loading">
+                            <FontAwesomeIcon icon={faSpinner} spin />
+                        </div>
+                    ) : bookingsError ? (
+                        <div className="error">Error: {bookingsError.message}</div>
+                    ) : (
+                        <div className="total-count">{bookings.length}</div>
+                    )}
+                </div>
+            </div>
+
+            <section className="pitches-section card">
+                <h3>Manage Pitches</h3>
+
+                {pitchesLoading ? (
+                    <div className="loading">
+                        <FontAwesomeIcon icon={faSpinner} spin /> Loading pitches...
+                    </div>
+                ) : pitchesError ? (
+                    <div className="error">Error loading pitches: {pitchesError.message}</div>
+                ) : (
+                    <div className="pitch-list">
+                        {pitches.map((pitch) => (
+                            <div key={pitch._id} className="pitch-card">
+                                <h4>{pitch.name}</h4>
+                                <p>Location: {pitch.location}</p>
+                                <p>Type: {pitch.PitchType}</p>
+                                <div className="actions">
+                                    <button onClick={() => handlePitchEdit(pitch)} className="edit-btn">
+                                        <FontAwesomeIcon icon={faEdit} /> Edit
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => handlePitchDelete(pitch._id)}
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} /> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <h3>Add New Pitch</h3>
+                <form onSubmit={handleSubmitPitch(onSubmitPitch)} className="add-pitch-form">
+                    <div className="form-group">
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            {...registerPitch("name", { required: true })}
+                        />
+                        {pitchErrors.name && <span className="error-message">This field is required</span>}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="location">Location:</label>
+                        <input type="text" id="location" {...registerPitch("location")} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="PitchType">Pitch Type:</label>
+                        <input type="text" id="PitchType" {...registerPitch("PitchType")} />
+                    </div>
+                    <button type="submit" className="add-btn">
+                        Add Pitch
+                    </button>
+                </form>
+
+                <Modal
+                    isOpen={!!editingPitch}
+                    onRequestClose={() => {
+                        setEditingPitch(null);
+                        resetPitch();
+                    }}
+                    contentLabel="Edit Pitch"
+                    className="modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <h3>Edit Pitch</h3>
+                    <form onSubmit={handleSubmitPitch(handlePitchUpdate)} className="edit-pitch-form">
+                        <div className="form-group">
+                            <label htmlFor="name">Name:</label>
+                            <input type="text" id="name" {...registerPitch("name")} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="location">Location:</label>
+                            <input type="text" id="location" {...registerPitch("location")} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="PitchType">Pitch Type:</label>
+                            <input type="text" id="PitchType" {...registerPitch("PitchType")} />
+                        </div>
+                        <button type="submit" className="update-btn">
+                            Update Pitch
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setEditingPitch(null);
+                                resetPitch();
+                            }}
+                            className="cancel-btn"
+                        >
+                            Cancel
+                        </button>
+                    </form>
+                </Modal>
+            </section>
+
+            <section className="bookings-section card">
+                <h3>Bookings</h3>
+
+                {bookingsLoading ? (
+                    <div className="loading">
+                        <FontAwesomeIcon icon={faSpinner} spin /> Loading bookings...
+                    </div>
+                ) : bookingsError ? (
+                    <div className="error">Error loading bookings: {bookingsError.message}</div>
+                ) : (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Pitch</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bookings.map((booking) => (
+                                <tr key={booking._id}>
+                                    <td>{booking.name}</td>
+                                    <td>
+                                        {pitches.find((pitch) => pitch._id === booking.pitch)?.name ||
+                                            "Unknown Pitch"}
+                                    </td>
+                                    <td>{booking.date}</td>
+                                    <td>{booking.time}</td>
+                                    <td>
+                                        <button onClick={() => handleBookingEdit(booking)} className="edit-btn">
+                                            <FontAwesomeIcon icon={faEdit} /> Edit
+                                        </button>
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() => handleBookingDelete(booking._id)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} /> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+
+                <h3>Add New Booking</h3>
+                <form onSubmit={handleSubmitBooking(onSubmitBooking)} className="add-booking-form">
+                    <div className="form-group">
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            {...registerBooking("name", { required: true })}
+                        />
+                        {bookingErrors.name && <span className="error-message">This field is required</span>}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="pitch">Select Pitch:</label>
+                        <select id="pitch" {...registerBooking("pitch")}>
+                            {pitches.map((pitch) => (
+                                <option key={pitch._id} value={pitch._id}>
+                                    {pitch.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="date">Date:</label>
+                        <input type="date" id="date" {...registerBooking("date")} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="time">Time:</label>
+                        <input type="time" id="time" {...registerBooking("time")} />
+                    </div>
+                    <button type="submit" className="add-btn">
+                        Add Booking
+                    </button>
+                </form>
+
+                <Modal
+                    isOpen={!!editingBooking}
+                    onRequestClose={() => {
+                        setEditingBooking(null);
+                        resetBooking();
+                    }}
+                    contentLabel="Edit Booking"
+                    className="modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <h3>Edit Booking</h3>
+                    <form onSubmit={handleSubmitBooking(handleBookingUpdate)} className="edit-booking-form">
+                        <div className="form-group">
+                            <label htmlFor="name">Name:</label>
+                            <input type="text" id="name" {...registerBooking("name")} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="pitch">Select Pitch:</label>
+                            <select id="pitch" {...registerBooking("pitch")}>
+                                {pitches.map((pitch) => (
+                                    <option key={pitch._id} value={pitch._id}>
+                                        {pitch.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="date">Date:</label>
+                            <input type="date" id="date" {...registerBooking("date")} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="time">Time:</label>
+                            <input type="time" id="time" {...registerBooking("time")} />
+                        </div>
+                        <button type="submit" className="update-btn">
+                            Update Booking
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setEditingBooking(null);
+                                resetBooking();
+                            }}
+                            className="cancel-btn"
+                        >
+                            Cancel
+                        </button>
+                    </form>
+                </Modal>
+            </section>
         </div>
-        <div>
-          <label htmlFor="PitchType">Pitch Type:</label>
-          <input type="text" id="PitchType" {...register("PitchType")} />
-        </div>
-        <button type="submit">Add Pitch</button>
-      </form>
-
-      {/* Form for editing pitches */}
-      <Modal 
-        isOpen={!!editingPitch} 
-        onRequestClose={() => { 
-          setEditingPitch(null); 
-          reset(); 
-        }}
-        contentLabel="Edit Pitch"
-      >
-        <h3>Edit Pitch</h3>
-<form onSubmit={handleSubmit(handlePitchUpdate)}>
-          
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" {...register("name")} />
-          </div>
-          <div>
-            <label htmlFor="location">Location:</label>
-            <input type="text" id="location" {...register("location")} />
-          </div>
-          <div>
-            <label htmlFor="PitchType">Pitch Type:</label>
-            <input type="text" id="PitchType" {...register("PitchType")} />
-          </div>
-          <button type="submit">Update Pitch</button>
-          <button
-            type="button"
-            onClick={() => {
-              setEditingPitch(null);
-              reset();
-            }}
-          >
-            Cancel
-          </button>
-        </form>
-      </Modal>
-    </section>
-
-    <section className="bookings-section card"> {/* Added card class */}
-      <h3>Bookings</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Pitch</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((booking) => (
-            <tr key={booking._id}>
-              <td>{booking.name}</td>
-              <td>
-                {pitches.find((pitch) => pitch._id === booking.pitch)?.name ||
-                  "Unknown Pitch"}
-              </td>
-              <td>{booking.date}</td>
-              <td>{booking.time}</td>
-              <td>
-                <button onClick={() => handleBookingEdit(booking)}>Edit</button>
-                <button className="delete-btn" onClick={() => handleBookingDelete(booking._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h3>Add New Booking</h3>
-      <form onSubmit={handleSubmit(onSubmitBooking)}>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", { required: true })}
-            />
-            {errors.name && <span>This field is required</span>}
-          </div>
-        <div>
-          <label htmlFor="pitch">Select Pitch:</label>
-          <select id="pitch" {...register("pitch")}>
-            {pitches.map((pitch) => (
-              <option key={pitch._id} value={pitch._id}>
-                {pitch.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="date">Date:</label>
-          <input type="date" id="date" {...register("date")} />
-        </div>
-        <div>
-          <label htmlFor="time">Time:</label>
-          <input type="time" id="time" {...register("time")} />
-        </div>
-        <button type="submit">Add Booking</button>
-      </form>
-
-      {/* Form for editing bookings */}
-      <Modal 
-        isOpen={!!editingBooking} 
-        onRequestClose={() => { 
-          setEditingBooking(null); 
-          reset(); 
-        }}
-        contentLabel="Edit Booking"
-      >
-        <h3>Edit Booking</h3>
-<form onSubmit={handleSubmit(handleBookingUpdate)}>
-          
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" {...register("name")} />
-          </div>
-          <div>
-            <label htmlFor="pitch">Select Pitch:</label>
-            <select id="pitch" {...register("pitch")}>
-              {pitches.map((pitch) => (
-                <option key={pitch._id} value={pitch._id}>
-                  {pitch.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="date">Date:</label>
-            <input type="date" id="date" {...register("date")} />
-          </div>
-          <div>
-            <label htmlFor="time">Time:</label>
-            <input type="time" id="time" {...register("time")} />
-          </div>
-          <button type="submit">Update Booking</button>
-          <button
-            type="button"
-            onClick={() => {
-              setEditingBooking(null);
-              reset();
-            }}
-          >
-            Cancel
-          </button>
-        </form>
-      </Modal>
-      </section>
-    </div>
-  );
+    );
 }
 
 export default AdminDashboard;
