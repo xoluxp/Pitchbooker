@@ -1,38 +1,44 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import Header from './Header'; // Import the Header component
-import Footer from './Footer'; // Import the Footer component
-import './Confirmation.css'; // Import the CSS file
+import { useLocation, Link } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer'; 
+import './Confirmation.css'; 
 
 function Confirmation() {
-  const location = useLocation();
-  const bookingData = location.state?.bookingData; // Access booking data
+    const location = useLocation();
+    const bookingData = location.state?.bookingData;
 
-  return (
-    <div>
-      <Header />
-      <div className="confirmation-container"> {/* new Container */}
-        <h2>Booking Confirmation</h2>
-      {bookingData && ( // Conditionally render booking details
+    // Extract pitch details from bookingData
+    const { pitchName, pitchLocation, pitchType } = bookingData || {};
+
+    return (
         <div>
-          <p>
-            Thank you, <strong>{bookingData.name}</strong> ! Your booking has been registred.
-          </p>
-          
-          <p>Number of players : {bookingData.teammates}</p>
-          <p>Pitch: {bookingData.pitchName}</p>
-          <p>Location: {bookingData.pitchLocation}</p> {/* Display location */}
-          <p>Type: {bookingData.pitchType}</p> {/* Display pitch type */}
-          <p>Date: {bookingData.date}</p>
-          <p>Time: {bookingData.time}</p>
-          <p><h3><strong>Consider being 15mins early to the pitch !!!</strong></h3></p>
-         
+            <Header />
+            <main className="confirmation-page"> {/* Added main tag for styling */}
+                <section className="confirmation-section">
+                    <h2>Booking Confirmation</h2>
+                    {bookingData ? (
+                        <div>
+                            <p>
+                                Thank you, <strong>{bookingData.name}</strong>! Your booking has been registered.
+                            </p>
+                            <p>Number of players: {bookingData.teammates}</p>
+                            <center></center><p>Pitch: {pitchName}</p> 
+                            <p>Location: {pitchLocation}</p> 
+                            <p>Type: {pitchType}</p> 
+                            <p>Date: {bookingData.date}</p>
+                            <p>Time: {bookingData.time}</p>
+                            <p><h3>Consider being 15 mins early to the pitch!!!</h3></p>
+                        </div>
+                    ) : (
+                        <p>No booking data found.</p>
+                    )}
+                   <center> <Link to="/booking" className="book-another-button">Book Another Pitch</Link> </center> 
+                </section>
+            </main>
+            <Footer />
         </div>
-        )}
-      </div>
-      <Footer />
-    </div>
-  );
+    );
 }
 
 export default Confirmation;
