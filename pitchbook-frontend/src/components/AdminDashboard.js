@@ -68,6 +68,21 @@ function AdminDashboard() {
         formState: { errors: bookingErrors },
     } = useForm();
 
+    useEffect(() => {
+        // Clear the feedback message after 7 seconds
+        let timeoutId;
+        if (feedbackMessage) {
+            timeoutId = setTimeout(() => {
+                setFeedbackMessage(null);
+                setFeedbackType(null);
+            }, 7000); // 7000 milliseconds = 7 seconds
+        }
+
+        // Clear the timeout if the component unmounts or feedbackMessage changes
+        return () => clearTimeout(timeoutId);
+    }, [feedbackMessage]); // Dependency array ensures the effect runs when feedbackMessage changes
+
+
     const refreshDashboardData = async () => {
         try {
             const pitchesResponse = await axios.get("http://localhost:5000/pitches");
@@ -173,18 +188,34 @@ function AdminDashboard() {
     };
 
     const onSubmitBooking = async (data) => {
-        try {
-            await axios.post("http://localhost:5000/bookings/add", data);
+      try {
+        // Get current date and time
+        const now = new Date();
 
-            refreshDashboardData();
-            resetBooking();
-            setFeedbackMessage("Booking added successfully!");
-            setFeedbackType("success");
-        } catch (error) {
-            console.error("Error adding booking:", error);
-            setFeedbackMessage(`Error adding booking: ${error.message}`);
-            setFeedbackType("error");
+        // Create Date object from form data
+        const [year, month, day] = data.date.split("-");
+        const [hours, minutes] = data.time.split(":");
+        const bookingDateTime = new Date(year, month - 1, day, hours, minutes); // Month is 0-indexed
+
+        // Validate date and time
+        if (bookingDateTime <= now) {
+          setFeedbackMessage("Cannot book on past date and time.");
+          setFeedbackType("error");
+          return;
         }
+
+        // Proceed with adding booking
+        await axios.post("http://localhost:5000/bookings/add", data);
+
+        refreshDashboardData();
+        resetBooking();
+        setFeedbackMessage("Booking added successfully!");
+        setFeedbackType("success");
+      } catch (error) {
+        console.error("Error adding booking:", error);
+        setFeedbackMessage(`Error adding booking: ${error.message}`);
+        setFeedbackType("error");
+      }
     };
 
     // Calculate upcoming bookings within the next week
@@ -196,9 +227,10 @@ function AdminDashboard() {
         return bookingDate >= today && bookingDate <= oneWeekFromToday;
     });
 
+
     return (
         <div className="admin-dashboard">
-            <h2>Admin Dashboard</h2>
+            <h2>The PitchBook Admin Dashboard</h2>
 
             {/* Feedback message */}
             {feedbackMessage && (
@@ -207,36 +239,40 @@ function AdminDashboard() {
                 </div>
             )}
 
-            <div className="cards-container">
-                {/* Pitches Card */}
-                <div className="card pitches-card">
-                    <h3>Total Pitches</h3>
-                    {pitchesLoading ? (
-                        <div className="loading">
-                            <FontAwesomeIcon icon={faSpinner} spin />
-                        </div>
-                    ) : pitchesError ? (
-                        <div className="error">Error: {pitchesError.message}</div>
-                    ) : (
-                        <div className="total-count">{pitches.length}</div>
-                    )}
-                </div>
+<div className="cards-container">
+        {/* Pitches Card */}
+        <div className="card pitches-card">
+          <h3>Total Pitches</h3>
+          {pitchesLoading ? (
+            <div className="loading">
+              <FontAwesomeIcon icon={faSpinner} spin />
+            </div>
+          ) : pitchesError ? (
+            <div className="error">Error: {pitchesError.message}</div>
+          ) : pitches.length === 0 ? ( // Check if there are no pitches
+            <div className="no-data">No pitches</div> 
+          ) : (
+            <div className="total-count">{pitches.length}</div>
+          )}
+        </div>
 
-                {/* Bookings Card */}
-                <div className="card bookings-card">
-                    <h3>Total Bookings</h3>
-                    {bookingsLoading ? (
-                        <div className="loading">
-                            <FontAwesomeIcon icon={faSpinner} spin />
-                        </div>
-                    ) : bookingsError ? (
-                        <div className="error">Error: {bookingsError.message}</div>
-                    ) : (
-                        <div className="total-count">{bookings.length}</div>
-                    )}
-                </div>
+        {/* Bookings Card */}
+        <div className="card bookings-card">
+          <h3>Total Bookings</h3>
+          {bookingsLoading ? (
+            <div className="loading">
+              <FontAwesomeIcon icon={faSpinner} spin />
+            </div>
+          ) : bookingsError ? (
+            <div className="error">Error: {bookingsError.message}</div>
+          ) : bookings.length === 0 ? ( // Check if there are no bookings
+            <div className="no-data">No bookings</div> 
+          ) : (
+            <div className="total-count">{bookings.length}</div>
+          )}
+        </div>
 
-                {/* Upcoming Bookings Card */}
+                {/* Upcoming Bookings */}
                 <div className="card upcoming-bookings-card">
                     <h3>Upcoming Bookings</h3>
                     {bookingsLoading ? (
@@ -255,11 +291,13 @@ function AdminDashboard() {
                 <h3>Manage Pitches</h3>
 
                 {pitchesLoading ? (
-                    <div className="loading">
-                        <FontAwesomeIcon icon={faSpinner} spin /> Loading pitches...
-                    </div>
-                ) : pitchesError ? (
-                    <div className="error">Error loading pitches: {pitchesError.message}</div>
+          <div className="loading">
+            <FontAwesomeIcon icon={faSpinner} spin /> Loading pitches...
+          </div>
+        ) : pitchesError ? (
+          <div className="error">Error loading pitches: {pitchesError.message}</div>
+        ) : pitches.length === 0 ? ( // Checking if there are no pitches.
+          <div className="no-data">No pitches</div> 
                 ) : (
                     <div className="pitch-list">
                         {pitches.map((pitch) => (
@@ -282,7 +320,7 @@ function AdminDashboard() {
                         ))}
                     </div>
                 )}
-
+                <br></br>
                 <h3>Add New Pitch</h3>
                 <form onSubmit={handleSubmitPitch(onSubmitPitch)} className="add-pitch-form">
                     <div className="form-group">
@@ -352,11 +390,15 @@ function AdminDashboard() {
                 <h3>Bookings</h3>
 
                 {bookingsLoading ? (
-                    <div className="loading">
-                        <FontAwesomeIcon icon={faSpinner} spin /> Loading bookings...
-                    </div>
-                ) : bookingsError ? (
-                    <div className="error">Error loading bookings: {bookingsError.message}</div>
+          <div className="loading">
+            <FontAwesomeIcon icon={faSpinner} spin /> Loading bookings...
+          </div>
+        ) : bookingsError ? (
+          <div className="error">
+            Error loading bookings: {bookingsError.message}
+          </div>
+        ) : bookings.length === 0 ? ( // checking if no booking in the list
+          <div className="no-data">No bookings</div> 
                 ) : (
                     <table>
                         <thead>
@@ -394,7 +436,7 @@ function AdminDashboard() {
                         </tbody>
                     </table>
                 )}
-
+                <br></br>
                 <h3>Add New Booking</h3>
                 <form onSubmit={handleSubmitBooking(onSubmitBooking)} className="add-booking-form">
                     <div className="form-group">
@@ -417,13 +459,18 @@ function AdminDashboard() {
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="date">Date:</label>
-                        <input type="date" id="date" {...registerBooking("date")} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="time">Time:</label>
-                        <input type="time" id="time" {...registerBooking("time")} />
-                    </div>
+                            <label htmlFor="date">Date:</label>
+                            <input type="date" id="date" {...registerBooking("date")} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="time">Time:</label>
+                            <input
+                            type="time"
+                            id="time"
+                            {...registerBooking("time")}
+                            step="3600" // Setting time input to hourly intervals
+                            />
+                        </div>
                     <button type="submit" className="add-btn">
                         Add Booking
                     </button>
