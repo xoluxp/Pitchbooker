@@ -1,11 +1,11 @@
 import React from 'react';
-import './HowItWorks.css'; // Import the CSS file
+import './HowItWorks.css';
 
 function HowItWorks() {
   return (
     <section className="how-it-works">
       <div className="container">
-        <h2 className="how-it-works-heading">Book Your Pitch in 3 Simple Steps</h2>
+        <h2 className="section-heading">How It Works</h2>
         <div className="steps-grid">
           <div className="step">
             <div className="step-number">1</div>
@@ -26,13 +26,12 @@ function HowItWorks() {
           <div className="step">
             <div className="step-number">3</div>
             <div className="step-icon">{/* Add icon here */}</div>
-            <h3 className="step-title">Book and Pay</h3>
+            <h3 className="step-title">Book and Pay Later</h3>
             <p className="step-description">
-              Confirm your booking by phone and securely pay online
-              or pay later.
+              Confirm your booking and securely pay online / inperson.
             </p>
           </div>
-        </div>
+        </div>  
       </div>
     </section>
   );
