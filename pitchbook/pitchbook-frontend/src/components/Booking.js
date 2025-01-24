@@ -103,15 +103,17 @@ function Booking() {
                         </div>
 
                         <div className="form-field">
-                            <label htmlFor="pitch">Select Pitch:</label>
-                            <select id="pitch" {...register('pitch', { required: true })}>
-                                <option value="">Select a pitch</option>
-                                {pitches.map(pitch => (
-                                    <option key={pitch._id} value={pitch._id}>{pitch.name}</option>
-                                ))}
-                            </select>
-                            {errors.pitch && <span className="error-message">This field is required</span>}
-                        </div>
+                        <label htmlFor="pitch">Select Pitch:</label>
+                        <select id="pitch" {...register('pitch', { required: true })}>
+                            <option value="">Select a pitch</option>
+                            {pitches.map(pitch => (
+                                <option key={pitch._id} value={pitch._id}>
+                                    {pitch.name} - {pitch.location} ({pitch.PitchType}) {/* adding pitch information */}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.pitch && <span className="error-message">This field is required</span>}
+                    </div>
 
                         <div className="form-field">
                             <label htmlFor="date">Date:</label>
