@@ -1,19 +1,29 @@
 import React from 'react';
-import './Header.css'; // Import your Header CSS file
+import { Link } from 'react-router-dom';
+import './Header.css';
 
 function Header() {
   return (
     <header className="header">
       <div className="container">
-        {/* Add your header content here, e.g., logo, navigation, etc. */}
-        <h1 className="header-logo">PitchBook</h1>
-        {/* Example navigation */}
+        <Link to="/" className="logo">
+          PitchBook
+        </Link>
         <nav>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/booking">Booking</a></li>
-            <li><a href="/booking">Booking Checker</a></li>
-            {/* Add more links as needed */}
+            <li>
+              <Link to="/booking">Book a Pitch</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact us</Link>
+            </li>
+           
           </ul>
         </nav>
       </div>
