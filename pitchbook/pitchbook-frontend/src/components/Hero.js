@@ -13,6 +13,9 @@ function Hero() {
           <Link to="/booking">
             <button className="btn btn-primary">Find Your Pitch</button>
           </Link>
+          <Link to="/login">
+            <button className="btn btn-primary">Login</button>
+          </Link>
         </div>
       </div>
     </section>
