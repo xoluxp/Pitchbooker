@@ -1,8 +1,12 @@
 import React from 'react';
 import './FAQs.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function FAQs() {
   return (
+    <div>
+      <Header />
     <div className="faqs">
       <h2>Frequently Asked Questions</h2>
       <div className="faq-item">
@@ -19,6 +23,8 @@ function FAQs() {
           refund eligibility and any applicable fees.
         </p>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

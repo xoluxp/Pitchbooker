@@ -1,8 +1,12 @@
 import React from 'react';
 import './Contact.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Contact() {
   return (
+    <div>
+      <Header />
     <div className="contact">
       <h2>Contact Us</h2>
       <p>We'd love to hear from you! Whether you have a question, feedback, or just want to say hello, feel free to reach out to us.</p>
@@ -16,6 +20,8 @@ function Contact() {
         
       </ul>
 
+    </div>
+    <Footer />
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import React from 'react';
 import './AboutUs.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function AboutUs() {
   return (
+    <div>
+      <Header />
     <div className="about-us">
       <h2>About PitchBook</h2>
       <p>
@@ -16,6 +20,8 @@ function AboutUs() {
         With PitchBook, you can easily browse available pitches, compare prices and amenities, 
         and book your preferred slot with just a few clicks.
       </p>
+    </div>
+    <Footer />
     </div>
   );
 }

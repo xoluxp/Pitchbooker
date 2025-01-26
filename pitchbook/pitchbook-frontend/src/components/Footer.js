@@ -22,9 +22,9 @@ function Footer() {
           <div className="footer-section">
             <h3>Social Media</h3>
             <ul>
-              <li><a href="https://www.facebook.com">Facebook</a></li>
-              <li><a href="https://www.twitter.com">Twitter</a></li>
-              <li><a href="https://www.instagram.com">Instagram</a></li>
+              <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+              <li><a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+              <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             </ul>
           </div>
           <div className="footer-section">
