@@ -79,10 +79,10 @@ function Booking() {
         <div>
             <Header />
 
-            <main className="booking-page"> {/* Added main tag for styling */}
+            <main className="booking-page"> 
                 <section className="booking-section">
                     <h2>Book a Pitch</h2>
-                    <p>Find the perfect pitch for your next game.</p> {/* Added introductory text */}
+                    <p>Find the perfect pitch for your next game.</p>
 
                     {bookingConfirmed && (
                         <div className="booking-confirmation">
@@ -108,7 +108,7 @@ function Booking() {
                             <option value="">Select a pitch</option>
                             {pitches.map(pitch => (
                                 <option key={pitch._id} value={pitch._id}>
-                                    {pitch.name} - {pitch.location} ({pitch.PitchType}) {/* adding pitch information */}
+                                    {pitch.name} - {pitch.location} ({pitch.PitchType})
                                 </option>
                             ))}
                         </select>

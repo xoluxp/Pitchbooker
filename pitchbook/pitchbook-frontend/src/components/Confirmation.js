@@ -14,7 +14,7 @@ function Confirmation() {
     return (
         <div>
             <Header />
-            <main className="confirmation-page"> {/* Added main tag for styling */}
+            <main className="confirmation-page"> 
                 <section className="confirmation-section">
                     <h2>Booking Confirmation</h2>
                     {bookingData ? (

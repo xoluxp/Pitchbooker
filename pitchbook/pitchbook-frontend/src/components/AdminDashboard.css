@@ -48,7 +48,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  color: #007bff; /* Customize loading spinner color */
+  color: #007bff; 
 }
 
 .pitch-list {
@@ -80,7 +80,7 @@ h3 {
 }
 
 .edit-btn {
-  background-color: #ffc107; /* Example edit button color */
+  background-color: #ffc107; 
   color: white;
   border: none;
   padding: 5px 10px;
@@ -89,7 +89,7 @@ h3 {
 }
 
 .delete-btn {
-  background-color: #dc3545; /* Example delete button color */
+  background-color: #dc3545; 
   color: white;
   border: none;
   padding: 5px 10px;
@@ -123,23 +123,23 @@ select {
 
 .add-btn,
 .update-btn {
-  background-color: #28a745; /* Example add/update button color */
+  background-color: #28a745; 
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
-  align-self: flex-start; /* Align buttons to the left */
+  align-self: flex-start; 
 }
 
 .cancel-btn {
-  background-color: #6c757d; /* Example cancel button color */
+  background-color: #6c757d; 
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
-  align-self: flex-start; /* Align buttons to the left */
+  align-self: flex-start; 
   margin-left: 10px;
 }
 
@@ -153,7 +153,7 @@ select {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1000; /* Ensure modal is on top */
+  z-index: 1000; 
 }
 
 .modal-overlay {
@@ -166,7 +166,7 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Ensure overlay is behind modal */
+  z-index: 999; 
 }
 
 /* Table styles */
@@ -200,7 +200,7 @@ th {
 
 .pitches-card,
 .bookings-card,
-.upcoming-bookings-card { /* Added .upcoming-bookings-card */
+.upcoming-bookings-card { 
   background-color: #f0f0f0;
   border: 1px solid #ddd;
   padding: 20px;
