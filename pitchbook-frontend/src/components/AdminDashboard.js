@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./AdminDashboard.css";
+import Header from '../components/Header';
 
 const useFetchData = (url) => {
     const [data, setData] = useState([]);
@@ -49,7 +50,7 @@ function AdminDashboard() {
     const [editingPitch, setEditingPitch] = useState(null);
     const [editingBooking, setEditingBooking] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState(null);
-    const [feedbackType, setFeedbackType] = useState(null); // 'success' or 'error'
+    const [feedbackType, setFeedbackType] = useState(null); 
 
     // Separate useForm instances for pitches and bookings
     const {
@@ -69,18 +70,18 @@ function AdminDashboard() {
     } = useForm();
 
     useEffect(() => {
-        // Clear the feedback message after 7 seconds
+        // Clearing the feedback message after 7 seconds
         let timeoutId;
         if (feedbackMessage) {
             timeoutId = setTimeout(() => {
                 setFeedbackMessage(null);
                 setFeedbackType(null);
-            }, 7000); // 7000 milliseconds = 7 seconds
+            }, 7000);
         }
 
-        // Clear the timeout if the component unmounts or feedbackMessage changes
+       
         return () => clearTimeout(timeoutId);
-    }, [feedbackMessage]); // Dependency array ensures the effect runs when feedbackMessage changes
+    }, [feedbackMessage]); 
 
 
     const refreshDashboardData = async () => {
@@ -229,6 +230,8 @@ function AdminDashboard() {
 
 
     return (
+        <div>
+            <Header />
         <div className="admin-dashboard">
             <h2>The PitchBook Admin Dashboard</h2>
 
@@ -526,6 +529,7 @@ function AdminDashboard() {
                     </form>
                 </Modal>
             </section>
+        </div>
         </div>
     );
 }

@@ -1,74 +1,49 @@
 .hero {
-   background-color: black; /* Black background */
-   color: white;
-   display: flex;
-   justify-content: center; /* Center horizontally */
-   align-items: center; /* Center vertically */
-   min-height: 100vh; /* Make it at least the height of the viewport */
-   text-align: center; /* Center text */
- }
- 
- .hero-content {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   max-width: 90%; /* Increased max-width */
-   margin: 0 auto;
-   padding: 20px;
- }
- 
- .hero-text {
-   flex: 1;
-   margin-right: 40px; /* Increased margin */
- }
- 
- .hero-graphic {
-   flex: 1;
-   background-image: url("../graphic.png");
-   background-size: contain;
-   background-repeat: no-repeat;
-   width: 500px; /* Increased width */
-   height: 400px; /* Increased height */
- }
- 
- .hero-heading {
-   font-size: 2.5rem; /* Adjust font size as needed */
-   margin-bottom: 1rem;
- }
- 
- .hero-subheading {
-   font-size: 1.8rem; /* Adjust font size as needed */
-   margin-bottom: 2rem;
- }
- 
- .btn {
-   padding: 10px 20px;
-   margin: 0 10px;
-   border-radius: 5px; /* Add rounded corners */
-   font-weight: bold;
- }
- 
- .btn-primary {
-   background-color: #00A86B; /* Green */
-   color: white;
-   border: none;
- }
- 
- .btn-secondary {
-   background-color: transparent;
-   color: #00A86B;
-   border: 2px solid #00A86B;
- }
- 
- .hero-image {
-   flex: 1; /* Allow the image to take up available space */
-   /* Add styles for your image here, e.g., background-image, width, height */
- }
- .btn-primary {
-  background-color: #00A86B; /* Green */
-  color: white;
-  padding: 10px 20px;
+  background-color: #000000;
+  color: #F0F4F8; 
+  padding: 100px 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 90%; 
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.hero-text {
+  text-align: center; 
+  margin-bottom: 30px; 
+}
+
+.hero-heading {
+  font-size: 3.5rem; 
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-subheading {
+  font-size: 1.8rem; 
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  background-color: #007A8D; 
+  color: #F0F4F8; 
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
+  font-size: 1.2rem;
   cursor: pointer;
+  transition: background-color 0.3s ease; 
+}
+
+.btn-primary:hover {
+  background-color: #004D40; 
 }
